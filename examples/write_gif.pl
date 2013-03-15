@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+use lib 'lib';
+
 use Acme::Odometer;
 use File::Slurp qw( write_file );
 use Path::Class qw(file);
@@ -11,7 +13,7 @@ my $path = file( 'assets', 'odometer' )->stringify;
 my $counter = Acme::Odometer->new( asset_path => $path );
 
 binmode STDOUT;
-write_file( "test.gif", $counter->image( '0123456789' )->gif );
+write_file( "test.gif", $counter->image( '000123456789' )->gif );
 
 =pod
 

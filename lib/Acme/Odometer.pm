@@ -102,3 +102,80 @@ sub image {
 1;
 
 # ABSTRACT: Create graphical web counters
+
+=head1 DESCRIPTION
+
+Create old school graphical counters.
+
+=head1 SYNOPSIS
+
+    use Acme::Odometer;
+
+    my $retro = Acme::Odometer->new( asset_path => 'path/to/digit/files' );
+
+    binmode STDOUT;
+    print $retro->image( '000123456789' )->png;
+
+
+    # or, write the image to a file for your viewing pleasure
+    use Acme::Odometer;
+    use File::Slurp qw( write_file );
+
+    my $retro = Acme::Odometer->new( asset_path => 'path/to/digit/files' );
+    my $image = $retro->image( '000123456789' );
+
+    # write as a GIF
+    write_file( "counter.gif", $image->gif );
+
+    # write as a PNG
+    write_file( "counter.png", $image->png );
+
+
+=head1 CONSTRUCTOR AND STARTUP
+
+=head2 new()
+
+Creates and returns a new Acme::Odometer object.
+
+=over 4
+
+=item * C<< asset_path => "/path/to/odometer/files" >>
+
+The path to your asset folder.  The asset folder will contain 0..9 image files
+of equal width, named 0.gif, 1.gif, 2.gif, 3.gif etc.  The images can be in any
+format which GD can read.  You may configure the file extension of your assets
+via the C<file_extension> param.
+
+=item * C<< file_extension >>
+
+The extension of the files in your asset directory: "gif", "GIF", "png", "jpg",
+"jpg", etc.  This module makes no assumptions about what is or is not a valid
+extension.  Defaults to "gif".
+
+    my $odometer = Acme::Odometer->new(
+        asset_path     => 'path/to/digit/files',
+        file_extension => 'png',
+    );
+
+=back
+
+=head2 image
+
+Returns a GD::Image object, which you can use to print your image
+
+    my $odometer = Acme::Odometer->new(
+        asset_path     => 'path/to/digit/files',
+        file_extension => 'png',
+    );
+
+    binmode STDOUT;
+    print $odometer->image->png;
+
+=head1 RESOURCES
+
+All you need to get started is the images.  The images should consist of the
+digits 0-9, all in the same file format and all of equal width.  For example,
+see L<http://digitmania.birdbrain.net/> for a bunch of insanely retro counter
+graphics.  Or, see the assets folder of this distribution for a basic odometer.
+
+=cut

@@ -3,7 +3,7 @@ use warnings;
 
 package Acme::Odometer;
 
-use Moo;
+use Moo 1.001;
 use MooX::Types::MooseLike::Numeric qw(PositiveInt);
 
 use Devel::Dwarn;
@@ -39,7 +39,7 @@ has digit_width => (
 has file_extension => (
     is       => 'ro',
     required => 0,
-    default  => quote_sub( q{ 'gif' } ),
+    default  => 'gif',
 );
 
 has _i => (

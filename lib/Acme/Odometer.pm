@@ -6,11 +6,9 @@ package Acme::Odometer;
 use Moo 1.001;
 use MooX::Types::MooseLike::Numeric qw(PositiveInt);
 
-use Devel::Dwarn;
 use GD;
 use Memoize;
 use Path::Class qw( file );
-use Sub::Quote qw( quote_sub );
 use namespace::autoclean;
 
 memoize( '_digit_as_image' );
@@ -20,7 +18,13 @@ has asset_path => (
     required => 1,
 );
 
-has digit_height => (
+has file_extension => (
+    is       => 'ro',
+    required => 0,
+    default  => 'gif',
+);
+
+has _digit_height => (
     is       => 'ro',
     isa      => PositiveInt,
     required => 0,
@@ -28,7 +32,7 @@ has digit_height => (
     builder  => '_build_height',
 );
 
-has digit_width => (
+has _digit_width => (
     is       => 'ro',
     isa      => PositiveInt,
     required => 0,
@@ -36,10 +40,11 @@ has digit_width => (
     builder  => '_build_width',
 );
 
-has file_extension => (
+has _first_image => (
     is       => 'ro',
-    required => 0,
-    default  => 'gif',
+    init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_first_image',
 );
 
 has _i => (
@@ -48,13 +53,6 @@ has _i => (
     required => 0,
     init_arg => undef,
     writer   => '_set_i',
-);
-
-has _first_image => (
-    is       => 'ro',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_first_image',
 );
 
 sub _build_width {
@@ -82,16 +80,16 @@ sub image {
     my $self = shift;
     $self->_set_i( shift() );
 
-    my $total_width = $self->digit_width * length $self->_i;
-    my $im          = GD::Image->new( $total_width, $self->digit_height );
+    my $total_width = $self->_digit_width * length $self->_i;
+    my $im          = GD::Image->new( $total_width, $self->_digit_height );
     my $percent     = 100;
 
     my $pos = 0;
     foreach my $digit ( split //, $self->_i ) {
         $im->copyMergeGray(
             $self->_digit_as_image( $digit ),
-            $pos * $self->digit_width,
-            0, 0, 0, $self->digit_width, $self->digit_height, $percent
+            $pos * $self->_digit_width,
+            0, 0, 0, $self->_digit_width, $self->_digit_height, $percent
         );
         $pos++;
     }
@@ -105,7 +103,10 @@ sub image {
 
 =head1 DESCRIPTION
 
-Create old school graphical counters.
+Acme::Odometer makes it easy to produce graphical web counters. You know, those
+odometer style thingies you used to see on a lot of geocities pages?  This
+module takes a bunch of images of different digits, strings them together and
+passes them back to you as a GD::Image object.
 
 =head1 SYNOPSIS
 
@@ -135,22 +136,22 @@ Create old school graphical counters.
 
 =head2 new()
 
-Creates and returns a new Acme::Odometer object.
+Creates and returns a new Acme::Odometer object.  The following parameters can
+be passed to new().
 
 =over 4
 
 =item * C<< asset_path => "/path/to/odometer/files" >>
 
-The path to your asset folder.  The asset folder will contain 0..9 image files
-of equal width, named 0.gif, 1.gif, 2.gif, 3.gif etc.  The images can be in any
-format which GD can read.  You may configure the file extension of your assets
-via the C<file_extension> param.
+The path to your asset folder.  The asset folder will contain 0..9
+image files of equal width, named 0.gif, 1.gif, 2.gif, 3.gif etc.  The images
+can be in any format which GD can read.  This parameter is required.
 
-=item * C<< file_extension >>
+=item * C<< file_extension => 'png' >>
 
 The extension of the files in your asset directory: "gif", "GIF", "png", "jpg",
-"jpg", etc.  This module makes no assumptions about what is or is not a valid
-extension.  Defaults to "gif".
+"jpeg", etc.  This module makes no assumptions about what is or is not a valid
+extension.  This parameter is optional and defaults to "gif".
 
     my $odometer = Acme::Odometer->new(
         asset_path     => 'path/to/digit/files',
@@ -173,9 +174,18 @@ Returns a GD::Image object, which you can use to print your image
 
 =head1 RESOURCES
 
-All you need to get started is the images.  The images should consist of the
-digits 0-9, all in the same file format and all of equal width.  For example,
-see L<http://digitmania.birdbrain.net/> for a bunch of insanely retro counter
+All you need to get started is the images, which should consist of the digits
+0-9, all in the same file format and all of equal width.  For example, see
+L<http://digitmania.birdbrain.net/> for a bunch of insanely retro counter
 graphics.  Or, see the assets folder of this distribution for a basic odometer.
+
+=head1 ACKNOWLEDGEMENTS
+
+It's hard to trace the history of a lot of web counter graphics which have been
+circulated as they seem to originate in the Wild West of the internet.  The
+images bundled with this dist appear to have been created by Heini Withagen,
+but this is hard to verify since the original page 404s now and also 404s in
+the earliest wayback machine snapshot (1999).  Original link found at
+L<http://www.ugrad.cs.ubc.ca/spider/q6e192/cgi/COUNTER.HTM>.
 
 =cut

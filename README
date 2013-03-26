@@ -4,6 +4,93 @@ NAME
 VERSION
     version 0.0.1
 
+SYNOPSIS
+        # write the image to a file for your viewing pleasure
+        use Acme::Odometer;
+        use File::Slurp qw( write_file );
+
+        my $image = $retro->image( '000123456789' );
+
+        # write as a GIF
+        write_file( "counter.gif", $image->gif );
+
+        # write as a PNG
+        write_file( "counter.png", $image->png );
+
+
+        # or (for example) in a Dancer app
+        # place an odometer graphic at /counter?count=12345
+        # in real life, you'll want to validate etc before creating the graphic
+
+        get '/counter' => sub {
+            header( 'Content-Type' => 'image/png' );
+            my $retro = Acme::Odometer->new(
+                asset_path     => 'path/to/digit/files',
+                file_extension => 'png',
+            );
+            $retro->image( params->{count} )->png;
+        };
+
+DESCRIPTION
+    This is a BETA release. The interface is still subject to change.
+
+    Acme::Odometer makes it easy to produce graphical web counters. You
+    know, those odometer style thingies you used to see on a lot of
+    geocities pages? This module takes a bunch of images of different
+    digits, strings them together and passes them back to you as a GD::Image
+    object.
+
+CONSTRUCTOR AND STARTUP
+  new()
+    Creates and returns a new Acme::Odometer object. The following
+    parameters can be passed to new().
+
+    *   "asset_path => "/path/to/odometer/files""
+
+        The path to your asset folder. The asset folder will contain 0..9
+        image files of equal width, named 0.gif, 1.gif, 2.gif, 3.gif etc.
+        The images can be in any format which GD can read. This parameter is
+        required.
+
+    *   "file_extension => 'png'"
+
+        The extension of the files in your asset directory: "gif", "GIF",
+        "png", "jpg", "jpeg", etc. This module makes no assumptions about
+        what is or is not a valid extension. This parameter is optional and
+        defaults to "gif".
+
+            my $odometer = Acme::Odometer->new(
+                asset_path     => 'path/to/digit/files',
+                file_extension => 'png',
+            );
+
+  image
+    Returns a GD::Image object, which you can use to print your image
+
+        my $odometer = Acme::Odometer->new(
+            asset_path     => 'path/to/digit/files',
+            file_extension => 'png',
+        );
+
+        binmode STDOUT;
+        print $odometer->image->png;
+
+RESOURCES
+    All you need to get started is the images, which should consist of the
+    digits 0-9, all in the same file format and all of equal width. For
+    example, see <http://digitmania.birdbrain.net/> for a bunch of insanely
+    retro counter graphics. Or, see the assets folder of this distribution
+    for a basic odometer.
+
+ACKNOWLEDGEMENTS
+    It's hard to trace the history of a lot of web counter graphics which
+    have been circulated as they seem to originate in the Wild West of the
+    internet. The images bundled with this dist appear to have been created
+    by Heini Withagen, but this is hard to verify since the original page
+    404s now and also 404s in the earliest wayback machine snapshot (1999).
+    Original link found at
+    <http://www.ugrad.cs.ubc.ca/spider/q6e192/cgi/COUNTER.HTM>.
+
 AUTHOR
     Olaf Alders <olaf@wundercounter.com>
 

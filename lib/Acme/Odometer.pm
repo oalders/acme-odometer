@@ -103,6 +103,8 @@ sub image {
 
 =head1 DESCRIPTION
 
+This is a BETA release.  The interface is still subject to change.
+
 Acme::Odometer makes it easy to produce graphical web counters. You know, those
 odometer style thingies you used to see on a lot of geocities pages?  This
 module takes a bunch of images of different digits, strings them together and
@@ -110,19 +112,10 @@ passes them back to you as a GD::Image object.
 
 =head1 SYNOPSIS
 
-    use Acme::Odometer;
-
-    my $retro = Acme::Odometer->new( asset_path => 'path/to/digit/files' );
-
-    binmode STDOUT;
-    print $retro->image( '000123456789' )->png;
-
-
-    # or, write the image to a file for your viewing pleasure
+    # write the image to a file for your viewing pleasure
     use Acme::Odometer;
     use File::Slurp qw( write_file );
 
-    my $retro = Acme::Odometer->new( asset_path => 'path/to/digit/files' );
     my $image = $retro->image( '000123456789' );
 
     # write as a GIF
@@ -130,6 +123,20 @@ passes them back to you as a GD::Image object.
 
     # write as a PNG
     write_file( "counter.png", $image->png );
+
+
+    # or (for example) in a Dancer app
+    # place an odometer graphic at /counter?count=12345
+    # in real life, you'll want to validate etc before creating the graphic
+
+    get '/counter' => sub {
+        header( 'Content-Type' => 'image/png' );
+        my $retro = Acme::Odometer->new(
+            asset_path     => 'path/to/digit/files',
+            file_extension => 'png',
+        );
+        $retro->image( params->{count} )->png;
+    };
 
 
 =head1 CONSTRUCTOR AND STARTUP

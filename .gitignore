@@ -1,3 +1,5 @@
-/Acme-Odometer*
 .build
+/Acme-Odometer*
+assets
+examples
 test.gif

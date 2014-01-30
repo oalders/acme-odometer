@@ -2,14 +2,19 @@ NAME
     Acme::Odometer - Create graphical web counters
 
 VERSION
-    version 0.0.1
+    version 0.0.2
 
 SYNOPSIS
         # write the image to a file for your viewing pleasure
         use Acme::Odometer;
         use File::Slurp qw( write_file );
 
-        my $image = $retro->image( '000123456789' );
+        my $odometer = Acme::Odometer->new(
+            asset_path     => 'path/to/digit/files',
+            file_extension => 'png',
+        );
+
+        my $image = $odometer->image( '000123456789' );
 
         # write as a GIF
         write_file( "counter.gif", $image->gif );
@@ -24,11 +29,11 @@ SYNOPSIS
 
         get '/counter' => sub {
             header( 'Content-Type' => 'image/png' );
-            my $retro = Acme::Odometer->new(
+            my $odometer = Acme::Odometer->new(
                 asset_path     => 'path/to/digit/files',
                 file_extension => 'png',
             );
-            $retro->image( params->{count} )->png;
+            $odometer->image( params->{count} )->png;
         };
 
 DESCRIPTION

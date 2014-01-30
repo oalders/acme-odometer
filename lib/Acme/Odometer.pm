@@ -116,7 +116,12 @@ passes them back to you as a GD::Image object.
     use Acme::Odometer;
     use File::Slurp qw( write_file );
 
-    my $image = $retro->image( '000123456789' );
+    my $odometer = Acme::Odometer->new(
+        asset_path     => 'path/to/digit/files',
+        file_extension => 'png',
+    );
+
+    my $image = $odometer->image( '000123456789' );
 
     # write as a GIF
     write_file( "counter.gif", $image->gif );
@@ -131,11 +136,11 @@ passes them back to you as a GD::Image object.
 
     get '/counter' => sub {
         header( 'Content-Type' => 'image/png' );
-        my $retro = Acme::Odometer->new(
+        my $odometer = Acme::Odometer->new(
             asset_path     => 'path/to/digit/files',
             file_extension => 'png',
         );
-        $retro->image( params->{count} )->png;
+        $odometer->image( params->{count} )->png;
     };
 
 

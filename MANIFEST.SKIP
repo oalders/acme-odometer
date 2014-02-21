@@ -5,3 +5,4 @@ MANIFEST.SKIP
 assets/png
 examples/Dancing-Odometer
 examples/write_png.pl
+local

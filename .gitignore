@@ -1,5 +1,7 @@
 .build
 /Acme-Odometer*
+/local
 assets
+cpanfile.snapshot
 examples
 test.gif

@@ -3,6 +3,7 @@
 .gitignore
 MANIFEST.SKIP
 assets/png
+cpanfile
 examples/Dancing-Odometer
 examples/write_png.pl
 local

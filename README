@@ -2,7 +2,7 @@ NAME
     Acme::Odometer - Create graphical web counters
 
 VERSION
-    version 0.0.2
+    version 0.0.3
 
 SYNOPSIS
         # write the image to a file for your viewing pleasure
@@ -100,7 +100,7 @@ AUTHOR
     Olaf Alders <olaf@wundercounter.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2013 by Olaf Alders.
+    This software is copyright (c) 2014 by Olaf Alders.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

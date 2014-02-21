@@ -5,6 +5,10 @@ perl:
   - "5.14"
   - "5.12"
   - "5.10"
+before_install:
+  - sudo apt-get install libgd2-xpm-dev
+install:
+  - cpanm --verbose --installdeps --notest .
 script:
   - "prove -lr t"
 notifications:

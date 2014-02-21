@@ -4,12 +4,12 @@ use warnings;
 package Acme::Odometer;
 
 use Moo 1.001;
-use MooX::Types::MooseLike::Numeric qw(PositiveInt);
+use namespace::clean;
 
 use GD;
 use Memoize;
+use MooX::Types::MooseLike::Numeric qw(PositiveInt PositiveOrZeroInt);
 use Path::Class qw( file );
-use namespace::autoclean;
 
 memoize( '_digit_as_image' );
 
@@ -49,7 +49,7 @@ has _first_image => (
 
 has _i => (
     is       => 'ro',
-    isa      => PositiveInt,
+    isa      => PositiveOrZeroInt,
     required => 0,
     init_arg => undef,
     writer   => '_set_i',

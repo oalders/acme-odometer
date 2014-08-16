@@ -1,6 +1,8 @@
 Revision history for Acme-Odometer
 
 {{$NEXT}}
+
+0.0.4     2014-08-16 08:53:42EDT-0400 America/Toronto
     -Adds META.yaml and minimum Perl version
 
 0.0.3     2014-02-20 23:34:26EST-0500 America/Toronto

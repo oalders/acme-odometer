@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 
+use 5.006;
+
 package Acme::Odometer;
 
 use Moo 1.001;

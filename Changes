@@ -1,7 +1,7 @@
 Revision history for Acme-Odometer
 
 {{$NEXT}}
-    -Adds META.yaml
+    -Adds META.yaml and minimum Perl version
 
 0.0.3     2014-02-20 23:34:26EST-0500 America/Toronto
     - Allow 0 as an argument for image().
